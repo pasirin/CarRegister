@@ -21,7 +21,7 @@ public class Vehicle {
 
   @NotBlank @LastModifiedDate private Instant newestDate;
 
-  @NotBlank @ManyToOne private Integer ownerId;
+  @NotBlank private String ownerName;
 
   @NotBlank private EVehicle type;
 
@@ -32,19 +32,19 @@ public class Vehicle {
   public Vehicle() {}
 
   public Vehicle(
-          Long id,
-          String plateNumber,
-          Instant createdDate,
-          Instant newestDate,
-          Integer ownerId,
-          EVehicle type,
-          Integer age,
-          ERegion lastRegion) {
+      Long id,
+      String plateNumber,
+      Instant createdDate,
+      Instant newestDate,
+      String ownerName,
+      EVehicle type,
+      Integer age,
+      ERegion lastRegion) {
     this.id = id;
     this.plateNumber = plateNumber;
     this.createdDate = createdDate;
     this.newestDate = newestDate;
-    this.ownerId = ownerId;
+    this.ownerName = ownerName;
     this.type = type;
     this.age = age;
     this.lastRegion = lastRegion;
@@ -68,14 +68,6 @@ public class Vehicle {
 
   public void setNewestDate(Instant newestDate) {
     this.newestDate = newestDate;
-  }
-
-  public Integer getOwner() {
-    return ownerId;
-  }
-
-  public void setOwner(Integer ownerId) {
-    this.ownerId = ownerId;
   }
 
   public EVehicle getType() {
@@ -108,5 +100,13 @@ public class Vehicle {
 
   public void setPlateNumber(String plateNumber) {
     this.plateNumber = plateNumber;
+  }
+
+  public String getOwnerName() {
+    return ownerName;
+  }
+
+  public void setOwnerName(String ownerName) {
+    this.ownerName = ownerName;
   }
 }

@@ -1,5 +1,6 @@
 package com.testing.carregister.models.user;
 
+import com.testing.carregister.models.vehicle.Vehicle;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -49,23 +50,21 @@ public class User {
       inverseJoinColumns = @JoinColumn(name = "region_id"))
   private Region regions = new Region();
 
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "region_vehicle",
+      joinColumns = @JoinColumn(name = "user_region"),
+      inverseJoinColumns = @JoinColumn(name = "vehicle_lastRegion"))
+  private Set<Vehicle> vehicles = new HashSet<>();
+
   public User() {}
 
-  public User(
-      Long id,
-      String username,
-      String email,
-      String password,
-      ERegion region,
-      Set<Role> roles,
-      Region regions) {
+  public User(Long id, String username, String email, String password, ERegion region) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
     this.region = region;
-    this.roles = roles;
-    this.regions = regions;
   }
 
   public Long getId() {
@@ -122,5 +121,13 @@ public class User {
 
   public void setRegions(Region regions) {
     this.regions = regions;
+  }
+
+  public Set<Vehicle> getVehicles() {
+    return vehicles;
+  }
+
+  public void setVehicles(Set<Vehicle> vehicles) {
+    this.vehicles = vehicles;
   }
 }

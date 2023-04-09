@@ -2,6 +2,7 @@ package com.testing.carregister.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.testing.carregister.models.user.ERegion;
+import com.testing.carregister.models.user.Region;
 import com.testing.carregister.models.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,9 +15,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Service
+
 public class UserDetailsImpl implements UserDetails {
-  @Serial private static final long serialVersionUID = 1L;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   private Long id;
 
@@ -27,7 +29,7 @@ public class UserDetailsImpl implements UserDetails {
 
   private Collection<? extends GrantedAuthority> authorities;
 
-  private ERegion region;
+  private Region region;
 
   public UserDetailsImpl(
       Long id,
@@ -35,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
       String email,
       String password,
       Collection<? extends GrantedAuthority> authorities,
-      ERegion region) {
+      Region region) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -109,7 +111,7 @@ public class UserDetailsImpl implements UserDetails {
     return email;
   }
 
-  public ERegion getRegion() {
+  public Region getRegion() {
     return region;
   }
 }

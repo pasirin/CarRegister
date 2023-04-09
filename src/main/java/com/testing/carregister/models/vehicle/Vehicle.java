@@ -29,6 +29,8 @@ public class Vehicle {
 
   @NotBlank private ERegion lastRegion;
 
+  @NotBlank private Boolean checked = false;
+
   public Vehicle() {}
 
   public Vehicle(
@@ -108,5 +110,13 @@ public class Vehicle {
 
   public void setOwnerName(String ownerName) {
     this.ownerName = ownerName;
+  }
+
+  public Boolean getChecked() {
+    return checked;
+  }
+
+  public void setChecked(Boolean checked) {
+    this.checked = checked;
   }
 }

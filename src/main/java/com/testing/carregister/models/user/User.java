@@ -34,7 +34,9 @@ public class User {
   @Size(max = 200)
   private String password;
 
-  @NotBlank private ERegion region;
+  @OneToOne
+  @JoinColumn(name = "region_id")
+  private Region region;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -42,13 +44,6 @@ public class User {
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
-
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "user_zone",
-      joinColumns = @JoinColumn(name = "user_region"),
-      inverseJoinColumns = @JoinColumn(name = "region_id"))
-  private Region regions = new Region();
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -59,12 +54,10 @@ public class User {
 
   public User() {}
 
-  public User(Long id, String username, String email, String password, ERegion region) {
-    this.id = id;
+  public User(String username, String email, String password) {
     this.username = username;
     this.email = email;
     this.password = password;
-    this.region = region;
   }
 
   public Long getId() {
@@ -107,20 +100,12 @@ public class User {
     this.roles = roles;
   }
 
-  public ERegion getRegion() {
+  public Region getRegion() {
     return region;
   }
 
-  public void setRegion(ERegion region) {
+  public void setRegion(Region region) {
     this.region = region;
-  }
-
-  public Region getRegions() {
-    return regions;
-  }
-
-  public void setRegions(Region regions) {
-    this.regions = regions;
   }
 
   public Set<Vehicle> getVehicles() {

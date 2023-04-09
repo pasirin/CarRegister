@@ -34,4 +34,8 @@ public class Region {
   public void setId(Integer id) {
     this.id = id;
   }
+
+  public String toString() {
+    return name.name();
+  }
 }

@@ -11,7 +11,7 @@
     <groupId>com.testing</groupId>
     <artifactId>carregister</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>carregister</name>
+    <name>CarRegister</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
@@ -95,6 +95,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

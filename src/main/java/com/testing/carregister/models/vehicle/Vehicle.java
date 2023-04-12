@@ -126,14 +126,8 @@ public class Vehicle {
   public void setType(EVehicle type) {
     this.type = type;
     switch (type) {
-      case TYPE_4 -> {
-        addAge(15L);
-        setChecked(true);
-      }
-      case TYPE_5 -> {
-        addAge(20L);
-        setChecked(true);
-      }
+      case TYPE_4 -> addAge(15L);
+      case TYPE_5 -> addAge(20L);
     }
   }
 

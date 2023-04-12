@@ -17,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.List;
 
@@ -61,6 +63,10 @@ public class VehicleController {
 
     Date today = new Date(Calendar.getInstance().getTime().getTime());
     vehicle.setNewestDate(today);
+    LocalDate createdAt = vehicle.getCreatedDate().toLocalDate();
+    LocalDate now = LocalDate.now();
+    long newAge = ChronoUnit.YEARS.between(createdAt, now);
+    vehicle.setAge(newAge);
     vehicle.predictNextCycle();
 
     vehicleRepository.save(vehicle);

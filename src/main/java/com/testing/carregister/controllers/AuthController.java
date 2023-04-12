@@ -12,6 +12,8 @@ import com.testing.carregister.security.jwt.JwtUtils;
 import com.testing.carregister.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +44,18 @@ public class AuthController {
   @Autowired PasswordEncoder encoder;
 
   @Autowired JwtUtils jwtUtils;
+
+
+  @EventListener
+  public void initRoles(ApplicationReadyEvent event) {
+    for(ERole role: ERole.values()) {
+      if(roleRepository.findByName(role).isEmpty()) {
+        Role temp = new Role(role);
+        roleRepository.save(temp);
+      }
+    }
+
+  }
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -121,7 +135,7 @@ public class AuthController {
     try{
       strRegion = ERegion.valueOf(signupUpRequest.getRegion());
     } catch (Exception e) {
-      throw new RuntimeException("Error: Không tìm thấy vùng." + e);
+      throw new RuntimeException("Error: Không tìm thấy vùng. " + e);
     }
     Region region = regionRepository.findByName(strRegion).orElseThrow(() -> new RuntimeException("Error: Không tìm thấy vùng."));
     user.setRegion(region);

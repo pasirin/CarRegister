@@ -3,6 +3,7 @@ package com.testing.carregister.repository;
 import com.testing.carregister.models.user.ERegion;
 import com.testing.carregister.models.vehicle.EVehicle;
 import com.testing.carregister.models.vehicle.Vehicle;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,9 +22,11 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     Optional<Vehicle> findByPlateNumber(String plateNumber);
 
+    boolean existsByPlateNumber(String plateNumber);
+
     long deleteById(Integer id);
 
-    List<Vehicle> findAll();
+    @NotNull List<Vehicle> findAll();
 
     long count();
 }

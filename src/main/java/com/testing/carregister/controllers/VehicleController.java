@@ -81,7 +81,7 @@ public class VehicleController {
       registerVehicle(vehicleRequest);
     }
     return ResponseEntity.ok(
-        new MessageResponse("Toàn bộ phương tiện đã được lưu vào cơ sở dữ liệu"));
+        new MessageResponse("Toàn bộ các phương tiện hợp lệ đã được lưu vào cơ sở dữ liệu"));
   }
 
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")

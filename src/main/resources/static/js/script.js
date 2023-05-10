@@ -4,11 +4,27 @@ eField = form.querySelector(".email"),
     pField = form.querySelector(".password"),
     pInput = pField.querySelector("input");
 
+const url = 'https://picsum.photos/' + window.screen.availWidth + '/' + window.screen.availHeight;
+let element = document.querySelector('body');
+let image = new Image();
+image.onload = () => {
+    element.style.setProperty('background-image', 'url(' + url + ')')
+    let opacity = 0;
+    let fadeIn = setInterval(() => {
+        if (opacity >= 1) {
+            clearInterval(fadeIn);
+        }
+        element.style.opacity = opacity;
+        opacity += 0.02;
+    }, 10);
+}
+image.src = url
+
 form.onsubmit = (e) => {
     e.preventDefault();
 
-    (eInput.value == "") ? eField.classList.add("shake", "error"): checkEmail();
-    (pInput.value == "") ? pField.classList.add("shake", "error"): checkPass();
+    (eInput.value == "") ? eField.classList.add("shake", "error") : checkEmail();
+    (pInput.value == "") ? pField.classList.add("shake", "error") : checkPass();
 
     setTimeout(() => {
         eField.classList.remove("shake");
@@ -19,13 +35,9 @@ form.onsubmit = (e) => {
     pInput.onkeyup = () => { checkPass(); }
 
     function checkEmail() {
-        let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-        if (!eInput.value.match(pattern)) {
+        if (eInput.value == "") {
             eField.classList.add("error");
             eField.classList.remove("valid");
-            let errorTxt = eField.querySelector(".error-txt");
-
-            (eInput.value != "") ? errorTxt.innerText = "Enter a valid email address": errorTxt.innerText = "Email can't be blank";
         } else {
             eField.classList.remove("error");
             eField.classList.add("valid");
@@ -43,6 +55,16 @@ form.onsubmit = (e) => {
     }
 
     if (!eField.classList.contains("error") && !pField.classList.contains("error")) {
-        window.location.href = form.getAttribute("action");
+        let body = {
+            username: eInput.value,
+            password: pInput.value,
+        }
+        fetch('/api/auth/signin', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        }).then(response=>response.json()).then(data=> console.log(data))
     }
 }

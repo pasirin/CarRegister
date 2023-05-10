@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
+    <title>Đăng nhập</title>
     <link rel="stylesheet" th:href="@{/css/test.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
 </head>
 
 <body>
 <div class="wrapper">
-    <header>Login Form</header>
+    <header>Đăng nhập</header>
     <form action="#">
+        <div th:if="${param.logout}" class="notify">
+            Bạn đã đăng xuất
+        </div>
         <div class="field email">
             <div class="input-area">
-                <input type="text" placeholder="Email Address">
+                <input type="text" id="username" name="username" placeholder="Tên người dùng">
                 <i class="icon fas fa-envelope"></i>
                 <i class="error error-icon fas fa-exclamation-circle"></i>
             </div>
-            <div class="error error-txt">Email can't be blank</div>
+            <div class="error error-txt">Tên người dùng không thể bỏ trống</div>
         </div>
         <div class="field password">
             <div class="input-area">
-                <input type="password" placeholder="Password">
+                <input type="password" id="password" name="password" placeholder="Mật khẩu">
                 <i class="icon fas fa-lock"></i>
                 <i class="error error-icon fas fa-exclamation-circle"></i>
             </div>
-            <div class="error error-txt">Password can't be blank</div>
+            <div class="error error-txt">Mật khẩu không thể để trống</div>
         </div>
-        <div class="pass-txt"><a href="#">Forgot password?</a></div>
-        <input type="submit" value="Login">
+        <input type="submit" value="Đăng nhập">
     </form>
-    <div class="sign-txt">Not yet member? <a href="#">Signup now</a></div>
 </div>
 
 <script th:src="@{/js/script.js}"></script>

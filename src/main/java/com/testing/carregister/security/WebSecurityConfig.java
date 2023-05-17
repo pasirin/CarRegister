@@ -21,9 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
-  @Autowired UserDetailsServiceImpl userDetailsService;
+  @Autowired
+  UserDetailsServiceImpl userDetailsService;
 
-  @Autowired private AuthEntryPointJwt unauthorizedHandler;
+  @Autowired
+  private AuthEntryPointJwt unauthorizedHandler;
 
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -53,35 +55,21 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.cors()
-        .and()
-        .csrf()
-        .disable()
-        .exceptionHandling()
-        .authenticationEntryPoint(unauthorizedHandler)
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeHttpRequests()
-        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ASYNC)
-        .permitAll()
-        .requestMatchers("/api/auth/**")
-        .permitAll()
-        .requestMatchers("/api/test/**")
-        .permitAll()
-        .requestMatchers("/")
-        .permitAll()
-        .requestMatchers("/js/**.js")
-        .permitAll()
-        .requestMatchers("/css/**.css")
-        .permitAll()
-        .requestMatchers("/**.png")
-        .permitAll()
-        .requestMatchers("/css/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated();
+    http.cors(it -> {})
+        .csrf(csrf -> csrf.disable())
+        .exceptionHandling(it -> it.authenticationEntryPoint(unauthorizedHandler))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(req -> {
+          req.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ASYNC).permitAll();
+          req.requestMatchers("/api/auth/**").permitAll();
+          req.requestMatchers("/api/test/**").permitAll();
+          req.requestMatchers("/").permitAll();
+          req.requestMatchers("/js/**.js").permitAll();
+          req.requestMatchers("/css/**.css").permitAll();
+          req.requestMatchers("/**.png").permitAll();
+          req.requestMatchers("/dashboard").permitAll();
+          req.anyRequest().authenticated();
+        });
 
     http.authenticationProvider(authenticationProvider());
 

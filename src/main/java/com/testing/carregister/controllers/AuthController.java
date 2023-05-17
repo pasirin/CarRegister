@@ -32,24 +32,28 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-  @Autowired AuthenticationManager authenticationManager;
+  @Autowired
+  AuthenticationManager authenticationManager;
 
-  @Autowired UserRepository userRepository;
+  @Autowired
+  UserRepository userRepository;
 
-  @Autowired RoleRepository roleRepository;
+  @Autowired
+  RoleRepository roleRepository;
 
   @Autowired
   RegionRepository regionRepository;
 
-  @Autowired PasswordEncoder encoder;
+  @Autowired
+  PasswordEncoder encoder;
 
-  @Autowired JwtUtils jwtUtils;
-
+  @Autowired
+  JwtUtils jwtUtils;
 
   @EventListener
   public void initRoles(ApplicationReadyEvent event) {
-    for(ERole role: ERole.values()) {
-      if(roleRepository.findByName(role).isEmpty()) {
+    for (ERole role : ERole.values()) {
+      if (roleRepository.findByName(role).isEmpty()) {
         Role temp = new Role(role);
         roleRepository.save(temp);
       }
@@ -59,19 +63,16 @@ public class AuthController {
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(), loginRequest.getPassword()));
+    Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            loginRequest.getUsername(), loginRequest.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(authentication);
     String jwt = jwtUtils.generateJwtToken(authentication);
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-    List<String> roles =
-        userDetails.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList());
-
+    List<String> roles = userDetails.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority)
+        .collect(Collectors.toList());
     return ResponseEntity.ok(
         new JwtResponse(
             jwt,
@@ -93,36 +94,35 @@ public class AuthController {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Email đã được sử dụng!"));
     }
 
-    User user =
-        new User(
-            signupUpRequest.getUsername(),
-            signupUpRequest.getEmail(),
-            encoder.encode(signupUpRequest.getPassword()));
+    User user = new User(
+        signupUpRequest.getUsername(),
+        signupUpRequest.getEmail(),
+        encoder.encode(signupUpRequest.getPassword()));
 
-    //Process user roles
+    // Process user roles
     Set<String> strRoles = signupUpRequest.getRole();
     Set<Role> roles = new HashSet<>();
 
     if (strRoles == null) {
       Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
+          .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
       roles.add(userRole);
     } else {
       strRoles.forEach(role -> {
         switch (role) {
           case "admin" -> {
             Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
+                .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
             roles.add(adminRole);
           }
           case "mod" -> {
             Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                    .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
+                .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
             roles.add(modRole);
           }
           default -> {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
+                .orElseThrow(() -> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy."));
             roles.add(userRole);
           }
         }
@@ -130,14 +130,15 @@ public class AuthController {
     }
     user.setRoles(roles);
 
-    //Process user Region
+    // Process user Region
     ERegion strRegion;
-    try{
+    try {
       strRegion = ERegion.valueOf(signupUpRequest.getRegion());
     } catch (Exception e) {
       throw new RuntimeException("Error: Không tìm thấy vùng. " + e);
     }
-    Region region = regionRepository.findByName(strRegion).orElseThrow(() -> new RuntimeException("Error: Không tìm thấy vùng."));
+    Region region = regionRepository.findByName(strRegion)
+        .orElseThrow(() -> new RuntimeException("Error: Không tìm thấy vùng."));
     user.setRegion(region);
     userRepository.save(user);
 

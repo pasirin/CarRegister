@@ -18,13 +18,17 @@ public class Vehicle {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank private String plateNumber;
+  @NotBlank
+  private String plateNumber;
 
-  @CreatedDate private Date createdDate;
+  @CreatedDate
+  private Date createdDate;
 
-  @LastModifiedDate private Date newestDate;
+  @LastModifiedDate
+  private Date newestDate;
 
-  @NotBlank private String ownerName;
+  @NotBlank
+  private String ownerName;
 
   private EVehicle type;
 
@@ -38,7 +42,8 @@ public class Vehicle {
 
   private Boolean checked = false;
 
-  public Vehicle() {}
+  public Vehicle() {
+  }
 
   public Vehicle(String plateNumber, Date createdDate, String ownerName) {
     this.plateNumber = plateNumber;
@@ -71,31 +76,40 @@ public class Vehicle {
     LocalDate temp2 = newestDate.toLocalDate();
     switch (type) {
       case TYPE_1 -> {
-        if(temp1.equals(temp2)) {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(30, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+        if (temp1.equals(temp2)) {
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(30, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else if (age < 7) {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else if (age < 12) {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         }
       }
       case TYPE_2 -> {
-        if(temp1.equals(temp2)) {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+        if (temp1.equals(temp2)) {
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         }
       }
       case TYPE_3 -> {
-        if(temp1.equals(temp2)) {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(24, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+        if (temp1.equals(temp2)) {
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(24, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else {
-          nextCycle = new Date(java.util.Date.from(temp1.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+          nextCycle = new Date(java.util.Date
+              .from(temp1.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         }
       }
-      default -> nextCycle = new Date(java.util.Date.from(temp1.plus(3, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+      default -> nextCycle = new Date(java.util.Date
+          .from(temp1.plus(3, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
     }
   }
 
@@ -125,9 +139,10 @@ public class Vehicle {
 
   public void setType(EVehicle type) {
     this.type = type;
-    switch (type) {
-      case TYPE_4 -> addAge(15L);
-      case TYPE_5 -> addAge(20L);
+    if (type == EVehicle.TYPE_4) {
+      addAge(15L);
+    } else if (type == EVehicle.TYPE_5) {
+      addAge(20L);
     }
   }
 

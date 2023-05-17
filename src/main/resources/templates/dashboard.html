@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+        <link rel="stylesheet" th:href="@{css/navbar.css}">
+        <link rel='stylesheet'
+            href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'>
+        <title>Trang chủ</title>
+    </head>
+    <body>
+        <div th:replace="navbar :: navbar"> </div>
+        
+        <section class="home">
+            <div class="text">Dashboard Sidebar</div>
+        </section>
+    </body>
+</html>

@@ -1,7 +1,5 @@
 package com.testing.carregister.payload.response;
 
-import com.testing.carregister.models.user.Region;
-
 import java.util.List;
 
 public class JwtResponse {

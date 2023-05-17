@@ -12,9 +12,12 @@
 <body>
 <div class="wrapper">
     <header>Đăng nhập</header>
-    <form action="#">
+    <form action="dashboard">
         <div th:if="${param.logout}" class="notify">
             Bạn đã đăng xuất
+        </div>
+        <div class="notify" id="wrong" hidden>
+            Sai tài khoản hoặc mật khẩu
         </div>
         <div class="field email">
             <div class="input-area">
@@ -28,7 +31,7 @@
             <div class="input-area">
                 <input type="password" id="password" name="password" placeholder="Mật khẩu">
                 <i class="icon fas fa-lock"></i>
-                <i class="error error-icon fas fa-exclamation-circle"></i>
+                <i class="fa fa-eye pass-icon" th:onclick=showPass()></i>
             </div>
             <div class="error error-txt">Mật khẩu không thể để trống</div>
         </div>

@@ -36,13 +36,14 @@ function ADMIN() {
 
 function highestRole() {
     const list = data.roles;
+    let output = "Đăng Ký Viên"
     for (let i = 0; i < list.length; i++) {
         if (list[i] == "ROLE_ADMIN") {
             ADMIN();
             return "ADMIN";
         } else if (list[i] == "ROLE_MODERATOR") {
-            return "Kiểm Duyệt Viên";
+            output = "Kiểm Duyệt Viên";
         }
     }
-    return "Đăng Ký Viên";
+    return output;
 }

@@ -17,6 +17,7 @@
     --primary-color-light: #F6F5FF;
     --toggle-color: #DDD;
     --text-color: #707070;
+    --table-color: #DDD;
 
     /* ====== Transition ====== */
     --tran-03: all 0.2s ease;
@@ -43,6 +44,7 @@ body.dark {
     --primary-color-light: #3a3b3c;
     --toggle-color: #fff;
     --text-color: #ccc;
+    --table-color: #3a3b3c;
 }
 
 /* ===== Sidebar ===== */
@@ -70,7 +72,7 @@ body.dark {
     display: flex;
     align-items: center;
     margin-top: 10px;
-    padding:0px !important;
+    padding: 0px !important;
 }
 
 .sidebar header .image,
@@ -203,7 +205,7 @@ body.dark .sidebar header .toggle {
     align-items: center;
     height: 100%;
     width: 100%;
-    padding:0px !important;
+    padding: 0px !important;
     border-radius: 6px;
     text-decoration: none;
     transition: var(--tran-03);
@@ -359,4 +361,57 @@ body.dark .home .text {
     to {
         margin-left: -100%;
     }
+}
+
+th.small,
+td.small {
+    font-size: 8px;
+}
+
+table.dataTable.display tbody tr.odd>.sorting_1 {
+    background-color: var(--table-color);
+}
+
+table.dataTable.display tbody tr.odd {
+    background-color: var(--table-color);
+}
+
+table.dataTable.display tbody tr.even>.sorting_1 {
+    background-color: var(--table-color);
+}
+
+table.dataTable.display tbody tr.even {
+    background-color: var(--table-color);
+}
+
+table.dataTable thead tr {
+    background-color: var(--table-color);
+}
+
+/* Round Corner for TOP LEFT COLUMN */
+
+table thead tr:first-child  th:first-child
+{
+    border-top-left-radius: 10px;
+}
+
+/* Round Corner for TOP RIGHT COLUMN */
+
+table thead tr:first-child  th:last-child
+{
+    border-top-right-radius: 10px;
+}
+
+/* Round Corner for BOTTOM LEFT COLUMN */
+
+table tbody tr:last-child td:first-child
+{
+    border-bottom-left-radius: 10px;
+}
+
+/* Round Corner for BOTTOM RIGHT COLUMN */
+
+table tbody tr:last-child td:last-child
+{
+    border-bottom-right-radius: 10px;
 }

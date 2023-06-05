@@ -1,19 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorator="layout/root_layout"
+      lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
         <link rel="stylesheet" th:href="@{css/navbar.css}">
         <link rel='stylesheet'
             href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <title>Trang chủ</title>
+    <style>
+    </style>
     </head>
     <body>
-        <div th:replace="navbar :: navbar"> </div>
-        
+
+        <div id="navbar" th:replace="navbar :: navbar"> </div>
+
         <section class="home">
-            <div class="text">Dashboard Sidebar</div>
+            <div class="text" id="title">Car registration web</div>
+
+            <br>
+            <br>
+
+            <div class="contentList" style="padding-left:60px"></div>
         </section>
+    <script type="text/javascript">
+      list = body.querySelector(".list");
+      contentList = body.querySelector(".contentList");
+
+      list.addEventListener("click" , () =>{
+            fetch('/list', {
+                method: 'get',
+                headers: {
+                    Authorization: "Bearer "+localStorage.getItem('user')
+                }
+            }).then(response => response.text()).then(data => {
+                if (data.status != 401) {
+                    console.log(data);
+                    contentList.innerHTML =data;
+                } else {
+                    console.log("false");
+                }
+            })
+
+      })
+function deleteAllVehicles(){
+            fetch('/deleteAll', {
+                method: 'delete',
+                headers: {
+                    Authorization: "Bearer "+localStorage.getItem('user')
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.status != 401) {
+                    console.log(data);
+                    contentList.innerHTML =data.message;
+                } else {
+                    console.log("false");
+                }
+            })
+    }
+    </script>
     </body>
 </html>

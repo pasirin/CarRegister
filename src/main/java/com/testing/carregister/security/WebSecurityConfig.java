@@ -57,6 +57,7 @@ public class WebSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors(it -> {})
         .csrf(csrf -> csrf.disable())
+
         .exceptionHandling(it -> it.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
@@ -64,11 +65,13 @@ public class WebSecurityConfig {
           req.requestMatchers("/api/auth/**").permitAll();
           req.requestMatchers("/api/test/**").permitAll();
           req.requestMatchers("/").permitAll();
+
           req.requestMatchers("/js/**.js").permitAll();
           req.requestMatchers("/css/**.css").permitAll();
           req.requestMatchers("/**.png").permitAll();
           req.requestMatchers("/dashboard").permitAll();
           req.anyRequest().authenticated();
+            ///
         });
 
     http.authenticationProvider(authenticationProvider());

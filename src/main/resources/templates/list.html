@@ -1,0 +1,226 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+
+    .deleteAll {
+  border: none;
+  display: inline;
+  text-align: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  background-color: #222;
+  padding: 12px 55px;
+  margin-left:80%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+}
+
+.deleteAll span {
+  position: relative;
+  z-index: 1;
+}
+
+.deleteAll:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 490%;
+  width: 140%;
+  background: #78c7d2;
+  -webkit-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+  transform: translateX(-98%) translateY(-25%) rotate(45deg);
+}
+
+.deleteAll:hover:after {
+  -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+  transform: translateX(-9%) translateY(-25%) rotate(45deg);
+}
+
+
+<!--confirm btn-->
+
+/* Add a color to the cancel button */
+ #deletebtn, #cancelbtn {
+}
+
+/* Add a color to the delete button */
+#deletebtn {
+order:1;
+  width: 45%;
+  margin: 8px 0;
+  cursor: pointer;
+  opacity: 0.9;
+  border: none;
+  padding: 14px 20px;
+  background-color: #f44336;
+}
+#cancelbttn{
+  order:2;
+  width: 45%;
+  margin: 8px 0;
+  cursor: pointer;
+  opacity: 0.9;
+  border: none;
+  padding: 14px 20px;
+  background-color: #ccc;
+  color: black;
+}
+#deletebtn:hover, #cancelbttn:hover  {
+  opacity:1;
+}
+
+/* Add padding and center-align text to the container */
+.container {
+  padding: 16px;
+  text-align: center;
+}
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  border: 1px solid #888;
+  height: 70%;
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: #474e5d;
+  padding-top: 50px;
+}
+
+
+/* The Modal Close Button (x) */
+.close {
+  position: absolute;
+  right: 35px;
+  top: 15px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #f1f1f1;
+}
+
+.close:hover,
+.close:focus {
+  color: #f44336;
+  cursor: pointer;
+}
+
+/* Clear floats */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Change styles for cancel button and delete button on extra small screens */
+@media screen and (max-width: 300px) {
+  #cancelbttn, #deletebtn {
+     width: 100%;
+  }
+}
+</style>
+<center>
+  <h2>Vehicle Information</h2>
+</center>
+<br>
+<br>
+<button id="delBtn" class="deleteAll"
+        onclick="document.getElementById('id01').style.display='block'"><span>Delete All</span></button>
+
+<div id="id01" class="modal">
+  <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
+  <form class="modal-content" style="width:40%; margin: 5% auto 15% auto;">
+    <div class="container">
+      <h1>Delete All Account</h1>
+      <br>
+      <p>Are you sure you want to delete all vehicle account?</p>
+      <br>
+      <br>
+      <div class="clearfix">
+        <button type="button" onclick="document.getElementById('id01').style.display='none';deleteAllVehicles()" id="deletebtn">Delete</button>
+        <button type="button" onclick="document.getElementById('id01').style.display='none'" id="cancelbttn">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="row form-group" style="display:inline;">
+  <a th:href="@{/create}" class="btn btn-lg " style="background-color:transparent;"><i
+          class="fa fa-plus-square"></i> Insert new vehicle </a>
+</div>
+<table class="table" style="padding-left:500px;">
+  <thead class="thead-light">
+  <tr class="row">
+    <th class="col-sm-1 ">order</th>
+    <th class="col-sm-1 ">id</th>
+    <th class="col-sm-2 ">Plate number</th>
+    <th class="col-sm-2 ">created date</th>
+    <th class="col-sm-2 ">newest date</th>
+    <th class="col-sm-2 ">owner name</th>
+    <th class="col-sm-1 ">type</th>
+    <th class="col-sm-1 ">age</th>
+    <th class="col-sm-2">Next Cycle</th>
+    <th class="col-sm-2">Function</th>
+
+  </tr>
+  </thead>
+  <tr class="row" th:each="vehicle, state : ${vehicles}" >
+    <td class="col-sm-1 " th:text="${state.count}"></td>
+    <td class="col-sm-1 " >
+      <a th:href="@{/show/__${vehicle.id}__}" th:text="${vehicle.id}"> </a>
+    </td>
+    <td class="col-sm-2 " th:text="${vehicle.plateNumber}"></td>
+    <td class="col-sm-2 " th:text="${vehicle.createdDate}"></td>
+    <td class="col-sm-2 " th:text="${vehicle.newestDate}"></td>
+    <td class="col-sm-2 " th:text="${vehicle.ownerName}"></td>
+    <td class="col-sm-1 " th:text="${vehicle.type}"></td>
+    <td class="col-sm-1 " th:text="${vehicle.age}"></td>
+    <td class="col-sm-2 " th:text="${vehicle.nextCycle}"></td>
+    <td class="col-sm-2" style="padding: 0; margin: 0">
+      <a th:href="@{/edit/__${vehicle.id}__}" class="btn btn-lg" style="background-color:transparent">
+        <i class="fa fa-edit"></i>
+      </a>
+      <a th:href="@{/delete/__${vehicle.id}__}" style="background-color:transparent;" class="btn">
+        <i class="fa fa-trash"></i>
+      </a>
+    </td>
+  </tr>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+             integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script type="text/javascript">
+
+    delBtn=body.querySelector(".deleteAll");
+    role=localStorage.getItem("userRole");
+    if (role.search("ROLE_ADMIN")==-1) {
+        document.getElementById("delBtn").disabled = true;
+        console.log("1")
+    }
+
+
+
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+</table>

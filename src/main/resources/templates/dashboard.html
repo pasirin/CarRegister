@@ -1,70 +1,62 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorator="layout/root_layout"
-      lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
         <link rel="stylesheet" th:href="@{css/navbar.css}">
         <link rel='stylesheet'
             href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'>
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
         <title>Trang chủ</title>
-    <style>
+        <style>
     </style>
     </head>
     <body>
+        <div th:replace="navbar :: navbar"> </div>
 
-        <div id="navbar" th:replace="navbar :: navbar"> </div>
-
-        <section class="home">
-            <div class="text" id="title">Car registration web</div>
-
-            <br>
-            <br>
-
-            <div class="contentList" style="padding-left:60px"></div>
+        <section class="home" id="Dashboard">
+            <div class="text container">
+                <canvas id="ChartPredict"
+                    style="width:100%;max-width:500px;display:inline;"></canvas>
+            </div>
+            <div class="text container">
+                <canvas id="ChartThisYear"
+                    style="width:100%;max-width:500px;display:inline;"></canvas>
+            </div>
+            <div class="text container">
+                Các xe đăng kiểm trong tháng này
+                <table id="example" class="display"></table>
+            </div>
+            <div class="text container">
+                Các xe dự kiến sẽ tái đăng kiểm trong tháng này
+                <table id="example1" class="display"></table>
+            </div>
         </section>
-    <script type="text/javascript">
-      list = body.querySelector(".list");
-      contentList = body.querySelector(".contentList");
 
-      list.addEventListener("click" , () =>{
-            fetch('/list', {
-                method: 'get',
-                headers: {
-                    Authorization: "Bearer "+localStorage.getItem('user')
-                }
-            }).then(response => response.text()).then(data => {
-                if (data.status != 401) {
-                    console.log(data);
-                    contentList.innerHTML =data;
-                } else {
-                    console.log("false");
-                }
-            })
+        <section class="home" id="Search" hidden>
+            <div class="text">Search Sidebar</div>
+        </section>
 
-      })
-function deleteAllVehicles(){
-            fetch('/deleteAll', {
-                method: 'delete',
-                headers: {
-                    Authorization: "Bearer "+localStorage.getItem('user')
-                }
-            }).then(response => response.json()).then(data => {
-                if (data.status != 401) {
-                    console.log(data);
-                    contentList.innerHTML =data.message;
-                } else {
-                    console.log("false");
-                }
-            })
-    }
-    </script>
+        <section class="home" id="Add" hidden>
+            <div class="text">Add Vehicle</div>
+        </section>
+
+        <section class="home" id="Predict" hidden>
+            <div class="text">Predict Next Cycle</div>
+        </section>
+
+        <section class="home" id="ADMIN" hidden>
+            <div class="text">ADMIN function</div>
+        </section>
+        <script th:src="@{/js/dashboard.js}"></script>
     </body>
 </html>

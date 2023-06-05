@@ -5,7 +5,6 @@ eField = form.querySelector(".email"),
     pInput = pField.querySelector("input");
 const wrongMes = document.getElementById("wrong");
 let show = false;
-var user;
 const eyeIcon = document.querySelector('i.pass-icon')
 const passInput = document.querySelector('input[id="password"]')
 const submitButton = document.querySelector('input[type="submit"]')
@@ -102,8 +101,7 @@ form.onsubmit = (e) => {
             if (data.status == 401) {
                 wrongMes.hidden = false
             } else {
-                localStorage.setItem("user", data.accessToken);
-                localStorage.setItem("userRole", data.roles);
+                localStorage.setItem("user", JSON.stringify(data));
                 window.location.replace(form.getAttribute("action"));
             }
         })

@@ -21,7 +21,7 @@
     </style>
     </head>
     <body>
-        <div th:replace="navbar :: navbar"> </div>
+        <div th:replace="~{navbar :: navbar}"> </div>
 
         <section class="home" id="Dashboard">
             <div class="text container">
@@ -43,19 +43,85 @@
         </section>
 
         <section class="home" id="Search" hidden>
-            <div class="text">Tra Cứu</div>
+            <div class="text container big">
+                <table id="SearchAll" class="display" style="width: 100%;"></table>
+            </div>
         </section>
 
         <section class="home" id="Add" hidden>
-            <div class="text">Thêm Phương Tiện Mới</div>
+            <div class="text container">
+                <div class="text form-header">
+                    Đơn đăng ký thêm phương tiện
+                </div>
+                <form class="add-Vehicle">
+                    <label for="ownername">Tên chủ phương tiện:</label>
+                    <span>
+                        <i class='bx bx-user'></i>
+                        <input type="text" id="ownername" name="owner"
+                            placeholder="Họ và Tên" required>
+                    </span>
+                    <label for="region">Chọn tỉnh đăng ký:</label>
+                    <span>
+                        <i class='bx bx-location-plus'></i>
+                        <select id="region">
+                            <option value="AN_GIANG">An Giang</option>
+                            <option value="BA_RIA_VUNG_TAU">Bà Rịa Vũng Tàu</option>
+                            <option value="BAC_LIEU">Bạc Liêu</option>
+                            <option value="BAC_GIANG">Bắc Giang</option>
+                            <option value="BAC_KAN">Bắc Kạn</option>
+                            <option value="BAC_NINH">Bắc Ninh</option>
+                            <option value="BEN_TRE">Bến Tre</option>
+                            <option value="BINH_DUONG">Bình Dương</option>
+                            <option value="BINH_DINH">Bình Định</option>
+                            <option value="BINH_PHUOC">Bình Phước</option>
+                            <option value="BINH_THUAN">Bình Thuận</option>
+                            <option value="CA_MAU">Cà Mau</option>
+                            <option value="CAO_BANG">Cao Bằng</option>
+                            <option value="CAN_THO">Cần Thơ</option>
+                            <option value="DA_NANG">Đà Nẵng</option>
+                            <option value="DAK_LAK">Đắk Lắk</option>
+                            <option value="DAK_NONG">Đắk Nông</option>
+                            <option value="DIEN_BIEN">Điện Biên</option>
+                            <option value="DONG_NAI">Đồng Nai</option>
+                            <option value="DONG_THAP">Đồng Tháp</option>
+                            <option value="GIA_LAI">Gia Lai</option>
+                            <option value="HA_GIANG">Hà Giang</option>
+                            <option value="HA_NAM">Hà Nam</option>
+                            <option value="HA_NOI">Hà Nội</option>
+                            <option value="HA_TINH">Hà Tĩnh</option>
+                            <option value="HAI_DUONG">Hải Dương</option>
+                        </select>
+                    </span>
+                    <label for="type">Chọn loại phương tiện: </label>
+                    <span>
+                        <i class='bx bxs-car'></i>
+                        <select id="type">
+                            <option value="TYPE_1">Xe loại 1</option>
+                            <option value="TYPE_2">Xe loại 2</option>
+                            <option value="TYPE_3">Xe loại 3</option>
+                            <option value="TYPE_4">Xe loại 4</option>
+                            <option value="TYPE_5">Xe loại 5</option>
+                        </select>
+                    </span>
+                    <label for="platenumber">Biển số xe:</label>
+                        <input type="text" id="platenumber" name="platenumber"
+                            placeholder="Mã số" maxlength="5" required>
+                    <label for="date">Thời điểm xe được sản xuất:</label>
+                    <span>
+                        <i class='bx bxs-calendar'></i>
+                        <input type="date" id="createdDate" name="created"
+                            required>
+                    </span>
+                </form>
+            </div>
         </section>
 
         <section class="home" id="Predict" hidden>
-            <div class="text">Dự Đoán Tháng Tới</div>
+            <div class="text container">Dự Đoán Tháng Tới</div>
         </section>
 
         <section class="home" id="ADMIN" hidden>
-            <div class="text">Quản Lý Tài Khoản</div>
+            <div class="text container big">Quản Lý Tài Khoản</div>
         </section>
         <script th:src="@{/js/dashboard.js}"></script>
     </body>

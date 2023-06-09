@@ -26,9 +26,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class VehicleController {
-  @Autowired VehicleRepository vehicleRepository;
+  @Autowired
+  VehicleRepository vehicleRepository;
 
-  @Autowired RegionRepository regionRepository;
+  @Autowired
+  RegionRepository regionRepository;
 
   @EventListener
   public void initRegion(ApplicationReadyEvent event) {
@@ -54,12 +56,22 @@ public class VehicleController {
   }
 
   @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+  @DeleteMapping("/delete/vehicle")
+  public ResponseEntity<?> deleteVehicle(@Valid @RequestBody Long id) {
+    if (vehicleRepository.findById(id).isPresent()) {
+      vehicleRepository.deleteById(id);
+      return ResponseEntity.ok(new MessageResponse("Phương tiện đã được xóa khỏi hệ thống"));
+    } else {
+      return ResponseEntity.badRequest().body(new MessageResponse("Không tồn tại phương tiện trên hệ thống"));
+    }
+  }
+
+  @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
   @PostMapping("/check/vehicle")
-  public ResponseEntity<?> checkVehicle(@Valid @RequestParam("plateNumber") String plateNumber) {
-    Vehicle vehicle =
-        vehicleRepository
-            .findByPlateNumber(plateNumber)
-            .orElseThrow(() -> new RuntimeException("Error: Không có xe nào với biển số này"));
+  public ResponseEntity<?> checkVehicle(@Valid @RequestBody Long id) {
+    Vehicle vehicle = vehicleRepository
+        .findById(id)
+        .orElseThrow(() -> new RuntimeException("Error: Không có xe nào với biển số này"));
 
     Date today = new Date(Calendar.getInstance().getTime().getTime());
     vehicle.setNewestDate(today);
@@ -100,18 +112,16 @@ public class VehicleController {
     }
     Vehicle vehicle;
     if (vehicleRequest.getNewestDate() != null) {
-      vehicle =
-          new Vehicle(
-              vehicleRequest.getPlateNumber(),
-              vehicleRequest.getCreatedDate(),
-              vehicleRequest.getNewestDate(),
-              vehicleRequest.getOwnerName());
+      vehicle = new Vehicle(
+          vehicleRequest.getPlateNumber(),
+          vehicleRequest.getCreatedDate(),
+          vehicleRequest.getNewestDate(),
+          vehicleRequest.getOwnerName());
     } else {
-      vehicle =
-          new Vehicle(
-              vehicleRequest.getPlateNumber(),
-              vehicleRequest.getCreatedDate(),
-              vehicleRequest.getOwnerName());
+      vehicle = new Vehicle(
+          vehicleRequest.getPlateNumber(),
+          vehicleRequest.getCreatedDate(),
+          vehicleRequest.getOwnerName());
     }
 
     // Process lastRegion
@@ -121,10 +131,9 @@ public class VehicleController {
     } catch (Exception e) {
       throw new RuntimeException("Error: Không tìm thấy vùng. " + e);
     }
-    Region region =
-        regionRepository
-            .findByName(strRegion)
-            .orElseThrow(() -> new RuntimeException("Error: Không tìm thấy vùng."));
+    Region region = regionRepository
+        .findByName(strRegion)
+        .orElseThrow(() -> new RuntimeException("Error: Không tìm thấy vùng."));
     vehicle.setLastRegion(region);
 
     // Process Type

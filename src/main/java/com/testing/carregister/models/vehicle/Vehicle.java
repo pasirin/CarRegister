@@ -78,38 +78,38 @@ public class Vehicle {
       case TYPE_1 -> {
         if (temp1.equals(temp2)) {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(30, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(30, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else if (age < 7) {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else if (age < 12) {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         }
       }
       case TYPE_2 -> {
         if (temp1.equals(temp2)) {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(18, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(6, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         }
       }
       case TYPE_3 -> {
         if (temp1.equals(temp2)) {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(24, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(24, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         } else {
           nextCycle = new Date(java.util.Date
-              .from(temp1.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+              .from(temp2.plus(12, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
         }
       }
       default -> nextCycle = new Date(java.util.Date
-          .from(temp1.plus(3, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
+          .from(temp2.plus(3, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime());
     }
   }
 

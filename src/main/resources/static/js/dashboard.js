@@ -4,12 +4,44 @@ if (localStorage.getItem("user") == null) {
     getData(data.tokenType + " " + data.accessToken);
 }
 
-const dashboard = document.getElementById('Dashboard'),
-    search = document.getElementById('Search'),
-    add = document.getElementById('Add'),
-    predict = document.getElementById('Predict'),
-    account = document.getElementById('ADMIN');
+const dashboard = document.getElementById('Dashboard');
 let currentDisplay = dashboard;
+
+$('form').submit(async function (e) {
+    e.preventDefault();
+    let ownername = $('#ownername').val();
+    let region = $('#region').val();
+    let Type = $('#type').val();
+    let platenumber = $('#platenumber').val();
+    let createddate = $('#createdDate').val();
+    let newestdate = $('#newestDate').val();
+    let body = {
+        plateNumber: platenumber,
+        createdDate: createddate,
+        lastRegion: region,
+        ownerName: ownername,
+        type: Type,
+    }
+    if (newestdate != "") {
+        body.newestDate = newestdate;
+    }
+    fetch('/api/add/vehicle', {
+        method: 'POST',
+        headers: {
+            "Authorization": data.tokenType + " " + data.accessToken,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    }).then(response => {
+        if (response.status == 200) {
+            alert("Phương tiện đã được thêm vào hệ thống")
+        } else {
+            alert(JSON.stringify(response.body))
+        }
+    })
+    await new Promise(resolve => setTimeout(resolve, 500))
+    await getData(data.tokenType + " " + data.accessToken, "update");
+})
 
 async function getData(key, option = "new") {
     await fetch("/api/get/vehicle", {
@@ -17,8 +49,8 @@ async function getData(key, option = "new") {
         headers: {
             "Authorization": key
         }
-    }).then(function(response) {
-        response.json().then(function(text) {
+    }).then(function (response) {
+        response.json().then(function (text) {
             let vehicleList = text;
             // Private Data variables to count
             let countGood = 0,
@@ -31,26 +63,27 @@ async function getData(key, option = "new") {
                 // Actual Date To Compare
                 let nextCycle = moment(text[i].nextCycle, "YYYY-MM-DD").toDate();
                 let firstCycle = moment(text[i].createdDate, "YYYY-MM-DD").toDate();
+                let newestCycle = moment(text[i].newestDate, "YYYY-MM-DD").toDate();
                 let today = new Date();
                 let nextMonth = new Date(today.setMonth(today.getMonth() + 1));
                 // Count the new Vehicles in the year
-                if (today.getFullYear() == firstCycle.getFullYear()) {
-                    countNewVehicles[firstCycle.getMonth()]++;
+                if (today.getFullYear() == firstCycle.getFullYear() || today.getFullYear() == newestCycle.getFullYear()) {
+                    countNewVehicles[newestCycle.getMonth()]++;
                 }
-
                 // Count the good, bad, and warning vehicles
-                if (today.getFullYear() == firstCycle.getFullYear() && today.getMonth() == firstCycle.getMonth()) {
-                    newVehicles.push(temp);
+                if ((today.getFullYear() == firstCycle.getFullYear() && today.getMonth() == firstCycle.getMonth() + 1) ||
+                    (today.getFullYear() == newestCycle.getFullYear() && today.getMonth() == newestCycle.getMonth() + 1)) {
+                    newVehicles.push(text[i]);
                     countGood++;
                     text[i].checked = "Còn Hạn";
                 } else if (nextCycle < nextMonth) {
                     countWarning++;
                     text[i].checked = "Sắp Hết Hạn";
-                    badWaringVehicles.push(nextCycle);
+                    badWaringVehicles.push(text[i]);
                 } else if (nextCycle < today) {
                     countBad++;
                     text[i].checked = "Quá Hạn";
-                    badWaringVehicles.push(nextCycle);
+                    badWaringVehicles.push(text[i]);
                 } else {
                     countGood++;
                     text[i].checked = "Còn Hạn";
@@ -58,7 +91,7 @@ async function getData(key, option = "new") {
                 text[i].lastRegion = convertRegion(text[i].lastRegion.name)
             }
             initChart(countGood, countWarning, countBad, countNewVehicles);
-            if (option == "new") { 
+            if (option == "new") {
                 initTables(vehicleList, badWaringVehicles, newVehicles);
             } else if (option == "update") {
                 updateTables(vehicleList, badWaringVehicles, newVehicles);
@@ -226,7 +259,7 @@ function initTables(entireList, notOkList, newThisMonthList) {
         let temp = mainTable.row($(this).parents('tr')).data();
         let text = "Xác nhận tái đăng kiểm lại phương tiện với viển số " + temp.plateNumber;
         if (confirm(text) == true) {
-            await deleteVehicle(temp.id);
+            await checkVehicle(temp.id);
             await new Promise(resolve => setTimeout(resolve, 500))
             await getData(data.tokenType + " " + data.accessToken, "update");
         }
@@ -242,7 +275,7 @@ async function checkVehicle(id) {
         },
         body: JSON.stringify(id),
     }).then(response => {
-        if(response.status == 200) {
+        if (response.status == 200) {
             alert("Tái đăng kiểm phương tiện thành công")
         } else {
             alert("Không tìm thấy phương tiện trên server")

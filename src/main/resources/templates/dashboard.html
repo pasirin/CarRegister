@@ -49,21 +49,21 @@
         </section>
 
         <section class="home" id="Add" hidden>
-            <div class="text container">
+            <div class="text container long">
                 <div class="text form-header">
                     Đơn đăng ký thêm phương tiện
                 </div>
-                <form class="add-Vehicle">
+                <form class="add-Vehicle" autocomplete="off">
                     <label for="ownername">Tên chủ phương tiện:</label>
                     <span>
                         <i class='bx bx-user'></i>
-                        <input type="text" id="ownername" name="owner"
+                        <input type="text" id="ownername" name="ownerName"
                             placeholder="Họ và Tên" required>
                     </span>
                     <label for="region">Chọn tỉnh đăng ký:</label>
                     <span>
                         <i class='bx bx-location-plus'></i>
-                        <select id="region">
+                        <select id="region" name="lastRegion">
                             <option value="AN_GIANG">An Giang</option>
                             <option value="BA_RIA_VUNG_TAU">Bà Rịa Vũng Tàu</option>
                             <option value="BAC_LIEU">Bạc Liêu</option>
@@ -95,7 +95,7 @@
                     <label for="type">Chọn loại phương tiện: </label>
                     <span>
                         <i class='bx bxs-car'></i>
-                        <select id="type">
+                        <select id="type" name="type">
                             <option value="TYPE_1">Xe loại 1</option>
                             <option value="TYPE_2">Xe loại 2</option>
                             <option value="TYPE_3">Xe loại 3</option>
@@ -104,14 +104,25 @@
                         </select>
                     </span>
                     <label for="platenumber">Biển số xe:</label>
-                        <input type="text" id="platenumber" name="platenumber"
-                            placeholder="Mã số" maxlength="5" required>
-                    <label for="date">Thời điểm xe được sản xuất:</label>
                     <span>
-                        <i class='bx bxs-calendar'></i>
-                        <input type="date" id="createdDate" name="created"
+                        <i class='bx bxs-car-wash'></i>
+                        <input type="text" id="platenumber" name="platenumber"
+                            placeholder="Mã số" minlength="8" maxlength="8"
                             required>
                     </span>
+                    <label for="createdDate">Thời điểm xe được sản xuất:</label>
+                    <span>
+                        <i class='bx bxs-calendar'></i>
+                        <input type="date" id="createdDate" name="createdDate"
+                            required>
+                    </span>
+                    <label for="newestDate">Lần gần nhất tái đăng kiểm:</label>
+                    <span>
+                        <i class='bx bx-calendar-alt'></i>
+                        <input type="date" id="newestDate" name="newestDate">
+                        (Không bắt buộc)
+                    </span>
+                    <input type="submit" value="Đăng Ký">
                 </form>
             </div>
         </section>

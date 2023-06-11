@@ -358,6 +358,10 @@ body.dark .home .text {
     height: 97%;
 }
 
+.home .container.long {
+    height: 97%;
+}
+
 .slide-left {
     animation: 1s slide-left;
     z-index: 1;
@@ -384,14 +388,41 @@ body.dark .home .text {
 }
 
 form.add-Vehicle {
-    padding-top: 20px;
+    padding: 40px 0px 90px 0px;
     display: grid;
     grid-template-columns: max-content max-content;
-    gap: 5px;
+    gap: 30px 10px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 
 form.add-Vehicle span{
     text-align: left;
+}
+
+form input[type="submit"] {
+    grid-column: span 2;
+    height: 50px;
+    margin-top: 50px;
+    color: #fff;
+    padding: 0;
+    cursor: progress;
+    transition: all 0.3s ease;
+    align-self: center;
+    justify-self: center;
+    width: 50%;
+}
+
+form input[type="submit"]:not(.disable) {
+    border: none;
+    background: #5372F0;
+    cursor: pointer;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+form input[type="submit"]:hover:not(.disable) {
+    background: #2c52ed;
 }
 
 
@@ -402,7 +433,7 @@ form label {
 
 form input, form select{
     outline: none;
-    padding: 10px 45px;
+    padding: 10px 15px 10px 45px;
     font-size: 15px;
     background: none;
     caret-color: #5372F0;

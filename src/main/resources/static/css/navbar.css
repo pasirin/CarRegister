@@ -387,7 +387,7 @@ body.dark .home .text {
     cursor: pointer;
 }
 
-form.add-Vehicle {
+form.add-Vehicle, form.add-Account {
     padding: 40px 0px 90px 0px;
     display: grid;
     grid-template-columns: max-content max-content;
@@ -397,7 +397,7 @@ form.add-Vehicle {
     align-items: center;
 }
 
-form.add-Vehicle span{
+form.add-Vehicle span, form.add-Account span{
     text-align: left;
 }
 
@@ -468,6 +468,10 @@ form i {
     to {
         margin-left: -100%;
     }
+}
+
+i.bx-hide, i.bx-show {
+    cursor: pointer;
 }
 
 th.small,

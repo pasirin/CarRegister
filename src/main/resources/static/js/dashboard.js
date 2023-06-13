@@ -3,11 +3,26 @@ if (localStorage.getItem("user") == null) {
 } else {
     getData(data.tokenType + " " + data.accessToken);
 }
+let showPass = false;
+let eyeIcon = document.querySelector('.bx-hide');
+
+function togglePass() {
+    showPass = !showPass
+    if (showPass) {
+        $('#password').attr("type", "text");
+        eyeIcon.classList.remove("bx-hide");
+        eyeIcon.classList.add("bx-show");
+    } else {
+        $('#password').attr("type", "password");
+        eyeIcon.classList.remove("bx-show");
+        eyeIcon.classList.add("bx-hide");
+    }
+}
 
 const dashboard = document.getElementById('Dashboard');
 let currentDisplay = dashboard;
 
-$('form').submit(async function (e) {
+$('form.add-Vehicle').submit(async function (e) {
     e.preventDefault();
     let ownername = $('#ownername').val();
     let region = $('#region').val();
@@ -36,11 +51,53 @@ $('form').submit(async function (e) {
         if (response.status == 200) {
             alert("Phương tiện đã được thêm vào hệ thống")
         } else {
-            alert(JSON.stringify(response.body))
+            alert("Thêm phương tiện thất bại vì đã có phương tiện có trùng biển số")
         }
     })
     await new Promise(resolve => setTimeout(resolve, 500))
     await getData(data.tokenType + " " + data.accessToken, "update");
+})
+
+$('form.add-Account').submit(async function (e) {
+    e.preventDefault();
+    let userName = $('#username').val();
+    let userEmail = $('#email').val();
+    let userPassword = $('#password').val();
+    let userRegion = $('#Userregion').val();
+    let userRole = $('#role').val();
+    switch (userRole) {
+        case 'mod':
+            userRole = ['user', 'mod']
+            break;
+        case 'admin':
+            userRole = ['user', 'mod', 'admin']
+            break;
+        default:
+            userRole = ['user']
+            break
+    }
+    let body = {
+        username: userName,
+        email: userEmail,
+        password: userPassword,
+        role: userRole,
+        region: userRegion,
+    }
+    fetch('/api/auth/signup', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    }).then(response => {
+        if (response.status == 200) {
+            alert("Người dùng đã được thêm vào hệ thống");
+        } else {
+            alert("Thêm người dùng thất bại vì đã có tài khoản trùng tên");
+        }
+    })
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await getAccList(data.tokenType + " " + data.accessToken);
 })
 
 async function getData(key, option = "new") {
@@ -302,6 +359,24 @@ async function deleteVehicle(id) {
     })
 }
 
+async function deleteUser(id) {
+    await fetch("/api/auth/delete/user", {
+        method: "DELETE",
+        headers: {
+            "Authorization": data.tokenType + " " + data.accessToken,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(id),
+    }).then(response => {
+        if (response.status == 200) {
+            alert("Người dùng đã được xóa khỏi hệ thống")
+        } else {
+            alert("Không tồn tại người dùng trên hệ thống")
+            console.log(response)
+        }
+    })
+}
+
 function convertRegion(strRegion) {
     let converter = {
         "AN_GIANG": "An Giang",
@@ -340,6 +415,9 @@ function convertRegion(strRegion) {
 }
 
 function SwtichSection(current) {
+    if (current == "ADMIN") {
+        getAccList(data.tokenType + " " + data.accessToken);
+    }
     if (currentDisplay.id != current) {
         currentDisplay.classList.add('slide-left');
         let temp = document.getElementById(current);
@@ -350,4 +428,77 @@ function SwtichSection(current) {
             currentDisplay = temp;
         });
     }
+}
+
+async function getAccList(key) {
+    await fetch('/api/auth/get/users', {
+        method: "GET",
+        headers: {
+            "Authorization": key,
+        }
+    }).then(response => {
+        response.json().then(list => {
+            if (!$.fn.DataTable.isDataTable('#AccountList')) {
+                let accountLabels = [
+                    { title: 'ID', data: 'id', className: "dt-center small" },
+                    { title: 'Tên người dùng', data: 'username', className: "dt-center small" },
+                    { title: 'email', data: 'email', className: "dt-center small" },
+                    {
+                        title: 'Vai trò', data: null, className: "dt-center small", render: function (data, type, row) {
+                            let output = "Đăng Ký Viên"
+                            for (let i = 0; i < data.roles.length; i++) {
+                                if (data.roles[i].name == "ROLE_ADMIN") {
+                                    return "ADMIN";
+                                } else if (data.roles[i].name == "ROLE_MODERATOR") {
+                                    output = "Kiểm Duyệt Viên";
+                                }
+                            }
+                            return output;
+                        }
+                    },
+                    {
+                        title: 'Tỉnh thành', data: null, className: "dt-center small", render: function (data, type, row) {
+                            return convertRegion(data.region.name)
+                        }
+                    },
+                    { title: 'Hành động', data: null, className: "dt-center small", defaultContent: "<i class='bx bxs-trash bx-sm actionable'></i>" }
+                ]
+                let AdminTable = $('#AccountList').DataTable({
+                    data: list,
+                    columns: accountLabels,
+                    createdRow: function (row, data, index) {
+                        if (data.roles.some(e => e.name === "ROLE_ADMIN")) {
+                            $(row).find('.bxs-trash').addClass('disable')
+                        }
+                    },
+                    info: false,
+                    lengthChange: false,
+                    language: {
+                        emptyTable: "Không có phương tiện nào",
+                        paginate: {
+                            first: "Trang đầu",
+                            last: "Trang cuối",
+                            next: "Trang sau",
+                            previous: "Trang trước"
+                        }
+                    }
+                })
+
+                $('#AccountList tbody').on('click', '.bxs-trash', async function () {
+                    let temp = AdminTable.row($(this).parents('tr')).data();
+                    let text = "Bạn có chắc chắn muốn xóa tài khoản với tên: " + temp.username + " không?";
+                    if (confirm(text) == true) {
+                        await deleteUser(temp.id);
+                        await new Promise(resolve => setTimeout(resolve, 500))
+                        await getAccList(data.tokenType + " " + data.accessToken);
+                    }
+                })
+            } else {
+                let AccountTable = $('#AccountList').DataTable();
+                AccountTable.clear();
+                AccountTable.rows.add(list);
+                AccountTable.draw();
+            }
+        })
+    })
 }

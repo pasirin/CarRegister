@@ -151,4 +151,16 @@ public class AuthController {
   public List<User> getAllUsers() {
     return userRepository.findAll();
   }
+
+  @PreAuthorize("hasRole('ADMIN')")
+  @DeleteMapping("/delete/user")
+  public ResponseEntity<?> deleteUser(@Valid @RequestBody Long id) {
+    if(userRepository.findById(id).isPresent()) {
+      userRepository.deleteById(id);
+      return ResponseEntity.ok(new MessageResponse("Người dùng đã được xóa khỏi hệ thống"));
+    } else {
+      return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy người dùng trên hệ thống"));
+    }
+  }
+
 }

@@ -132,7 +132,89 @@
         </section>
 
         <section class="home" id="ADMIN" hidden>
-            <div class="text container big">Quản Lý Tài Khoản</div>
+            <div class="text container long">
+                <div class="text form-header">
+                    Danh sách các tài khoản
+                </div>
+                <table id="AccountList" class="display"></table>
+            </div>
+            <div class="text container long">
+                <div class="text form-header">
+                    Thêm tài khoản người dùng mới
+                </div>
+                <form class="add-Account" autocomplete="off">
+                    <label for="username">
+                        Tên đăng nhập cho tài khoản:
+                    </label>
+                    <span>
+                        <i class='bx bx-user'></i>
+                        <input type="text" id="username" name="username"
+                            placeholder="Tối thiểu 3 ký tự" required
+                            minlength="3">
+                    </span>
+                    <label for="email">
+                        Email của tài khoản:
+                    </label>
+                    <span>
+                        <i class='bx bx-envelope'></i>
+                        <input type="email" id="email" name="email"
+                            placeholder="Địa chỉ mail người dùng" required>
+                    </span>
+                    <label for="password">
+                        Nhập mật khẩu cho tài khoản:
+                    </label>
+                    <span>
+                        <i class='bx bx-hide' th:onclick="togglePass()"></i>
+                        <input type="password" id="password" name="password"
+                            placeholder="Tối thiểu 6 ký tự" minlength="6">
+                    </span>
+                    <label for="Userregion">Chọn tỉnh đăng ký:</label>
+                    <span>
+                        <i class='bx bx-location-plus'></i>
+                        <select id="Userregion" name="region">
+                            <option value="AN_GIANG">An Giang</option>
+                            <option value="BA_RIA_VUNG_TAU">Bà Rịa Vũng Tàu</option>
+                            <option value="BAC_LIEU">Bạc Liêu</option>
+                            <option value="BAC_GIANG">Bắc Giang</option>
+                            <option value="BAC_KAN">Bắc Kạn</option>
+                            <option value="BAC_NINH">Bắc Ninh</option>
+                            <option value="BEN_TRE">Bến Tre</option>
+                            <option value="BINH_DUONG">Bình Dương</option>
+                            <option value="BINH_DINH">Bình Định</option>
+                            <option value="BINH_PHUOC">Bình Phước</option>
+                            <option value="BINH_THUAN">Bình Thuận</option>
+                            <option value="CA_MAU">Cà Mau</option>
+                            <option value="CAO_BANG">Cao Bằng</option>
+                            <option value="CAN_THO">Cần Thơ</option>
+                            <option value="DA_NANG">Đà Nẵng</option>
+                            <option value="DAK_LAK">Đắk Lắk</option>
+                            <option value="DAK_NONG">Đắk Nông</option>
+                            <option value="DIEN_BIEN">Điện Biên</option>
+                            <option value="DONG_NAI">Đồng Nai</option>
+                            <option value="DONG_THAP">Đồng Tháp</option>
+                            <option value="GIA_LAI">Gia Lai</option>
+                            <option value="HA_GIANG">Hà Giang</option>
+                            <option value="HA_NAM">Hà Nam</option>
+                            <option value="HA_NOI">Hà Nội</option>
+                            <option value="HA_TINH">Hà Tĩnh</option>
+                            <option value="HAI_DUONG">Hải Dương</option>
+                        </select>
+                    </span>
+                    <label for="role">
+                        Chức vụ của người dùng
+                    </label>
+                    <span>
+                        <i class='bx bx-shield'></i>
+                        <select id="role" name="role">
+                            <option value="user">Đăng Ký Viên</option>
+                            <option value="mod">Kiểm Duyệt
+                                Viên</option>
+                            <option value="admin">ADMIN</option>
+                        </select>
+                    </span>
+                    <input type="submit" value="Đăng ký">
+                </form>
+            </div>
         </section>
         <script th:src="@{/js/dashboard.js}"></script>
     </body>

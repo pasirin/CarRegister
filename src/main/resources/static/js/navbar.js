@@ -110,11 +110,11 @@ async function changeData(list, method="add") {
             } else {
                 alert("Không đủ thẩm quyền để xóa dữ liệu")
                 console.log(response)
+                return
             }
         })
         await new Promise(resolve => setTimeout(resolve, 500))
         await getData(data.tokenType + " " + data.accessToken, "update");
-        return
     }
     let payload = [];
     await list.forEach(element => {

@@ -227,7 +227,7 @@ function initChart(good, warning, bad, countNew, countNext, countRegion) {
                 text: "Tình trạng đăng kiểm của toàn bộ các xe trong tháng này"
             }
         }
-    }).update();
+    }).update()
     let barChartLabel = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
     let barChartValues = countNew;
     new Chart("ChartThisYear", {
@@ -246,7 +246,7 @@ function initChart(good, warning, bad, countNew, countNext, countRegion) {
                 text: "Số lượng các xe đã đăng kiểm trong năm nay"
             }
         }
-    }).update();
+    }).update()
     new Chart("ChartNextCycle", {
         type: "bar",
         data: {
@@ -263,7 +263,7 @@ function initChart(good, warning, bad, countNew, countNext, countRegion) {
                 text: "Biểu đồ phân bố số lượng các phương tiện sẽ phải đăng kiểm lại trong năm nay"
             }
         }
-    }).update();
+    }).update()
     const sortable = Object.fromEntries(
         Object.entries(countRegion).sort(([, a], [, b]) => a - b)
     )
@@ -289,7 +289,7 @@ function initChart(good, warning, bad, countNew, countNext, countRegion) {
                 text: "5 Tỉnh Thành có số lượng phương tiện nhiều nhất"
             }
         }
-    }).update();
+    }).update()
 }
 
 function initTables(entireList, notOkList, newThisMonthList) {

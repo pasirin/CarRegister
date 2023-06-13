@@ -363,7 +363,7 @@ body.dark .home .text {
 }
 
 .slide-left {
-    animation: 1s slide-left;
+    animation: 0.5s slide-left;
     z-index: 1;
 }
 
@@ -414,14 +414,25 @@ form input[type="submit"] {
     width: 50%;
 }
 
-form input[type="submit"]:not(.disable) {
+.pressable{
+    height: 50px;
+    color: #fff;
+    padding: 0;
+    cursor: progress;
+    transition: all 0.3s ease;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+form input[type="submit"]:not(.disable), button.pressable:not(.disable) {
     border: none;
     background: #5372F0;
     cursor: pointer;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
-form input[type="submit"]:hover:not(.disable) {
+form input[type="submit"]:hover:not(.disable), button.pressable:hover:not(.disable) {
     background: #2c52ed;
 }
 
@@ -458,6 +469,16 @@ form i {
 
 #Add{
     text-align: center;
+}
+
+div.grid-container{
+    padding: 40px 0px 90px 0px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 30px 10px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 
 @keyframes slide-left {

@@ -6,6 +6,26 @@ if (localStorage.getItem("user") == null) {
 let showPass = false;
 let eyeIcon = document.querySelector('.bx-hide');
 
+async function downloadData() {
+    await fetch("/api/get/vehicle", {
+        method: "GET",
+        headers: {
+            "Authorization": data.tokenType + " " + data.accessToken
+        }
+    }).then(response => {
+        response.json().then(text => {
+            text.forEach(elemet => {
+                elemet.lastRegion = elemet.lastRegion.name;
+            })
+            filename = 'database.xlsx';
+            let ws = XLSX.utils.json_to_sheet(text);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Vehicle");
+            XLSX.writeFile(wb, filename);
+        })
+    })
+}
+
 function togglePass() {
     showPass = !showPass
     if (showPass) {
@@ -116,6 +136,8 @@ async function getData(key, option = "new") {
             let badWaringVehicles = [];
             let newVehicles = [];
             let countNewVehicles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            let countNextMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            let countRegisterdRegion = {};
             for (let i = 0; i < text.length; i++) {
                 // Actual Date To Compare
                 let nextCycle = moment(text[i].nextCycle, "YYYY-MM-DD").toDate();
@@ -127,27 +149,36 @@ async function getData(key, option = "new") {
                 if (today.getFullYear() == firstCycle.getFullYear() || today.getFullYear() == newestCycle.getFullYear()) {
                     countNewVehicles[newestCycle.getMonth()]++;
                 }
+                // Count All the vehicle next cycle month
+                if (today.getFullYear() == nextCycle.getFullYear()) {
+                    countNextMonth[nextCycle.getMonth()]++;
+                }
                 // Count the good, bad, and warning vehicles
                 if ((today.getFullYear() == firstCycle.getFullYear() && today.getMonth() == firstCycle.getMonth() + 1) ||
                     (today.getFullYear() == newestCycle.getFullYear() && today.getMonth() == newestCycle.getMonth() + 1)) {
                     newVehicles.push(text[i]);
                     countGood++;
                     text[i].checked = "Còn Hạn";
-                } else if (nextCycle < nextMonth) {
-                    countWarning++;
-                    text[i].checked = "Sắp Hết Hạn";
-                    badWaringVehicles.push(text[i]);
                 } else if (nextCycle < today) {
                     countBad++;
                     text[i].checked = "Quá Hạn";
+                    badWaringVehicles.push(text[i]);
+                } else if (nextCycle < nextMonth) {
+                    countWarning++;
+                    text[i].checked = "Sắp Hết Hạn";
                     badWaringVehicles.push(text[i]);
                 } else {
                     countGood++;
                     text[i].checked = "Còn Hạn";
                 }
                 text[i].lastRegion = convertRegion(text[i].lastRegion.name)
+                if (countRegisterdRegion[text[i].lastRegion] == undefined) {
+                    countRegisterdRegion[text[i].lastRegion] = 1;
+                } else {
+                    countRegisterdRegion[text[i].lastRegion]++;
+                };
             }
-            initChart(countGood, countWarning, countBad, countNewVehicles);
+            initChart(countGood, countWarning, countBad, countNewVehicles, countNextMonth, countRegisterdRegion);
             if (option == "new") {
                 initTables(vehicleList, badWaringVehicles, newVehicles);
             } else if (option == "update") {
@@ -161,18 +192,22 @@ function updateTables(entireList, notOkList, newThisMonthList) {
     let searchTable = $('#SearchAll').DataTable();
     let dashboardTable1 = $('#ThisMonthNew').DataTable();
     let dashboardTable2 = $('#PredictThisMonth').DataTable();
+    let predictionTable = $('#prediction').DataTable();
     searchTable.clear();
     dashboardTable1.clear();
     dashboardTable2.clear();
+    predictionTable.clear();
     searchTable.rows.add(entireList);
     dashboardTable1.rows.add(newThisMonthList);
     dashboardTable2.rows.add(notOkList);
+    predictionTable.rows.add(notOkList);
     searchTable.draw();
     dashboardTable1.draw();
     dashboardTable2.draw();
+    predictionTable.draw();
 }
 
-function initChart(good, warning, bad, countNew) {
+function initChart(good, warning, bad, countNew, countNext, countRegion) {
     let pieLabel = ["Còn Hạn", "Sắp Hết Hạn", "Quá Hạn"];
     let pieValue = [good, warning, bad];
     let pieColors = ["#00FF00", "#FFFF00", "#FF0000"];
@@ -211,6 +246,49 @@ function initChart(good, warning, bad, countNew) {
             }
         }
     }).update();
+    new Chart("ChartNextCycle", {
+        type: "bar",
+        data: {
+            labels: barChartLabel,
+            datasets: [{
+                backgroundColor: "lightblue",
+                data: countNext
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Biểu đồ phân bố số lượng các phương tiện sẽ phải đăng kiểm lại trong năm nay"
+            }
+        }
+    }).update();
+    const sortable = Object.fromEntries(
+        Object.entries(countRegion).sort(([, a], [, b]) => a - b)
+    )
+    let regionLabel = [];
+    let regionValue = [];
+    let regionColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"]
+    for (const [key, value] of Object.entries(sortable)) {
+        regionLabel.push(key);
+        regionValue.push(value);
+    }
+    new Chart("ChartRegion", {
+        type: "pie",
+        data: {
+            labels: regionLabel,
+            datasets: [{
+                backgroundColor: regionColors,
+                data: regionValue
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "5 Tỉnh Thành có số lượng phương tiện nhiều nhất"
+            }
+        }
+    }).update();
 }
 
 function initTables(entireList, notOkList, newThisMonthList) {
@@ -234,6 +312,17 @@ function initTables(entireList, notOkList, newThisMonthList) {
         { title: 'Tình trạng đăng kiểm', data: "checked", className: "dt-center" },
         { title: 'Hành động', data: null, className: "dt-center", defaultContent: "<i class='bx bxs-trash bx-sm actionable'></i><i class='bx bx-check-square bx-sm actionable'></i>" }
     ]
+    let predictionLabels = [
+        { title: 'ID', data: "id", className: "dt-center small" },
+        { title: 'Biển số', data: "plateNumber", className: "dt-center small" },
+        { title: 'Người đứng tên', data: "ownerName", className: "dt-center small" },
+        { title: 'Điểm đăng kiểm', data: "lastRegion", className: "dt-center small" },
+        { title: 'Hạn đăng kiểm tiếp', data: "nextCycle", className: "dt-center small" },
+        { title: 'Tình trạng đăng kiểm', data: "checked", className: "dt-center small" },
+        { title: 'Hành động', data: null, className: "dt-center small", defaultContent: "<i class='bx bxs-trash bx-sm actionable'></i><i class='bx bx-check-square bx-sm actionable'></i>" }
+    ]
+
+    // Dashboard table
     let mainTable = $('#SearchAll').DataTable({
         data: entireList,
         columns: bigTableLabels,
@@ -314,6 +403,50 @@ function initTables(entireList, notOkList, newThisMonthList) {
 
     $('#SearchAll tbody').on('click', '.bx-check-square', async function () {
         let temp = mainTable.row($(this).parents('tr')).data();
+        let text = "Xác nhận tái đăng kiểm lại phương tiện với viển số " + temp.plateNumber;
+        if (confirm(text) == true) {
+            await checkVehicle(temp.id);
+            await new Promise(resolve => setTimeout(resolve, 500))
+            await getData(data.tokenType + " " + data.accessToken, "update");
+        }
+    })
+
+    //Prediction table
+    let predictionTable = $('#prediction').DataTable({
+        data: notOkList,
+        columns: predictionLabels,
+        createdRow: function (row, data, index) {
+            if (data.checked == "Sắp Hết Hạn") {
+                $(row).addClass('warningData');
+            } else {
+                $(row).addClass('badData');
+            }
+        },
+        info: false,
+        lengthChange: false,
+        language: {
+            emptyTable: "Không có phương tiện nào",
+            paginate: {
+                first: "Trang đầu",
+                last: "Trang cuối",
+                next: "Trang sau",
+                previous: "Trang trước"
+            }
+        }
+    })
+
+    $('#prediction tbody').on('click', '.bxs-trash', async function () {
+        let temp = predictionTable.row($(this).parents('tr')).data();
+        let text = "Bạn có chắc chắn muốn xóa phương tiện với biển số: " + temp.plateNumber + " không?";
+        if (confirm(text) == true) {
+            await deleteVehicle(temp.id);
+            await new Promise(resolve => setTimeout(resolve, 500))
+            await getData(data.tokenType + " " + data.accessToken, "update");
+        }
+    })
+
+    $('#prediction tbody').on('click', '.bx-check-square', async function () {
+        let temp = predictionTable.row($(this).parents('tr')).data();
         let text = "Xác nhận tái đăng kiểm lại phương tiện với viển số " + temp.plateNumber;
         if (confirm(text) == true) {
             await checkVehicle(temp.id);
@@ -422,7 +555,7 @@ function SwtichSection(current) {
         currentDisplay.classList.add('slide-left');
         let temp = document.getElementById(current);
         temp.hidden = false;
-        new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
+        new Promise(resolve => setTimeout(resolve, 500)).then(() => {
             currentDisplay.classList.remove('slide-left');
             currentDisplay.hidden = true;
             currentDisplay = temp;

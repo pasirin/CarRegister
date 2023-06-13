@@ -16,6 +16,8 @@
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.6/xlsx.full.min.js"></script>
         <title>Trang chủ</title>
         <style>
     </style>
@@ -33,11 +35,15 @@
                     style="width:100%;max-width:500px;display:inline;"></canvas>
             </div>
             <div class="text container">
-                Các xe đăng kiểm trong tháng này
+                <div class="text form-header">
+                    Các xe đăng kiểm trong tháng này
+                </div>
                 <table id="ThisMonthNew" class="display"></table>
             </div>
             <div class="text container">
-                Các xe dự kiến sẽ tái đăng kiểm trong tháng này
+                <div class="text form-header">
+                    Các xe dự kiến sẽ tái đăng kiểm trong tháng này
+                </div>
                 <table id="PredictThisMonth" class="display"></table>
             </div>
         </section>
@@ -125,10 +131,45 @@
                     <input type="submit" value="Đăng Ký">
                 </form>
             </div>
+            <div class="text container long">
+                <div class="text form-header">
+                    Công cụ Nhập/Xuất dữ liệu dưới dạng Excel
+                </div>
+                <div class="grid-container">
+                    <label for="download">Tải xuống dưới dạng Excel:</label>
+                    <button id="download" type="button" class="pressable"
+                        th:onclick="downloadData()">Tải xuống!</button>
+                    <label for="deleteAll">Xóa toàn bộ dữ liệu các phương tiện</label>
+                    <button id="deleteAll" type="button" class="pressable"
+                        disabled>Xóa
+                        toàn bộ!</button>
+                    <label for="addmore">Tải dữ liệu các phương tiện từ file
+                        Excel</label>
+                    <button id="addmore" type="button" class="pressable"
+                        disabled>
+                        Chọn file
+                    </button>
+                    <label for="freshrestart">Thay thế toàn bộ dữ liệu phương
+                        tiện bằng file Excel</label>
+                    <button id="freshrestart" type="button" class="pressable"
+                        disabled>Chọn file</button>
+                </div>
+            </div>
         </section>
 
         <section class="home" id="Predict" hidden>
-            <div class="text container">Dự Đoán Tháng Tới</div>
+            <div class="text container long">
+                <div class="text form-header">
+                    Các phương tiện được dự đoán sẽ tái đăng kiểm
+                </div>
+                <table id="prediction" class="display" style="width: 100%;"></table>
+            </div>
+            <div class="text container long">
+                <canvas id="ChartNextCycle"
+                    style="width:100%;max-width:600px;display: block;"></canvas>
+                <canvas id="ChartRegion"
+                    style="width:100%;max-width:600px;display: block;"></canvas>
+            </div>
         </section>
 
         <section class="home" id="ADMIN" hidden>
@@ -136,7 +177,7 @@
                 <div class="text form-header">
                     Danh sách các tài khoản
                 </div>
-                <table id="AccountList" class="display"></table>
+                <table id="AccountList" class="display" style="width: 100%;"></table>
             </div>
             <div class="text container long">
                 <div class="text form-header">

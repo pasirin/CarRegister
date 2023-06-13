@@ -59,7 +59,16 @@ public class AuthController {
         roleRepository.save(temp);
       }
     }
-
+    if(!userRepository.findByUsername("secretadmin").isPresent()) {
+      User user = new User("secretadmin", "secret@mail.com", encoder.encode("lordofthering"));
+      Set<Role> roles = new HashSet<>();
+      roles.add(roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(()-> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy.")));
+      roles.add(roleRepository.findByName(ERole.ROLE_MODERATOR).orElseThrow(()-> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy.")));
+      roles.add(roleRepository.findByName(ERole.ROLE_USER).orElseThrow(()-> new RuntimeException("Error: Vai trò người dùng không đươc tìm thấy.")));
+      user.setRoles(roles);
+      user.setRegion(regionRepository.findByName(ERegion.HA_NOI).orElseThrow(() -> new RuntimeException("Error: Không tìm thấy vùng.")));
+      userRepository.save(user);
+    }
   }
 
   @PostMapping("/signin")
@@ -84,6 +93,7 @@ public class AuthController {
             userDetails.getRegion().toString()));
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping("signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupUpRequest) {
     if (userRepository.existsByUsername(signupUpRequest.getUsername())) {

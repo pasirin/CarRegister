@@ -139,20 +139,26 @@
                     <label for="download">Tải xuống dưới dạng Excel:</label>
                     <button id="download" type="button" class="pressable"
                         th:onclick="downloadData()">Tải xuống!</button>
-                    <label for="deleteAll">Xóa toàn bộ dữ liệu các phương tiện</label>
-                    <button id="deleteAll" type="button" class="pressable"
+                    <label for="deleteAll" class="tooltip">Xóa toàn bộ dữ liệu:
+                        các phương tiện<span class="tooltiptext">Chỉ ADMIN mới
+                            có quyền</span></label>
+                    <button id="deleteAll" type="button"
+                        class="pressable disable"
                         disabled>Xóa
                         toàn bộ!</button>
-                    <label for="addmore">Tải dữ liệu các phương tiện từ file
-                        Excel</label>
-                    <button id="addmore" type="button" class="pressable"
-                        disabled>
-                        Chọn file
-                    </button>
-                    <label for="freshrestart">Thay thế toàn bộ dữ liệu phương
-                        tiện bằng file Excel</label>
-                    <button id="freshrestart" type="button" class="pressable"
-                        disabled>Chọn file</button>
+                    <label for="addmore" class="tooltip">Tải dữ liệu các phương
+                        tiện từ file
+                        Excel:<span class="tooltiptext">Chỉ ADMIN mới có quyền</span></label>
+                    <input id="addmore" type="file" accept=".xlsx"
+                        class="pressable disable"
+                        disabled />
+                    <label for="freshrestart" class="tooltip">Thay thế toàn bộ
+                        dữ liệu phương
+                        tiện bằng file Excel:<span class="tooltiptext">Chỉ ADMIN
+                            mới có quyền</span></label>
+                    <input id="freshrestart" type="file" accept=".xlsx"
+                        class="pressable disable"
+                        disabled />
                 </div>
             </div>
         </section>

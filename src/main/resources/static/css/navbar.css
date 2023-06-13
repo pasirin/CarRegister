@@ -383,11 +383,12 @@ body.dark .home .text {
     opacity: 20%;
 }
 
-.actionable:not(.disable){
+.actionable:not(.disable) {
     cursor: pointer;
 }
 
-form.add-Vehicle, form.add-Account {
+form.add-Vehicle,
+form.add-Account {
     padding: 40px 0px 90px 0px;
     display: grid;
     grid-template-columns: max-content max-content;
@@ -397,7 +398,8 @@ form.add-Vehicle, form.add-Account {
     align-items: center;
 }
 
-form.add-Vehicle span, form.add-Account span{
+form.add-Vehicle span,
+form.add-Account span {
     text-align: left;
 }
 
@@ -414,25 +416,30 @@ form input[type="submit"] {
     width: 50%;
 }
 
-.pressable{
+.pressable {
     height: 50px;
     color: #fff;
     padding: 0;
-    cursor: progress;
     transition: all 0.3s ease;
     width: 100%;
     border-radius: 5px;
     font-size: 15px;
 }
 
-form input[type="submit"]:not(.disable), button.pressable:not(.disable) {
+.pressable.disable {
+    background: gray;
+}
+
+form input[type="submit"]:not(.disable),
+button.pressable:not(.disable) {
     border: none;
     background: #5372F0;
     cursor: pointer;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
-form input[type="submit"]:hover:not(.disable), button.pressable:hover:not(.disable) {
+form input[type="submit"]:hover:not(.disable),
+button.pressable:hover:not(.disable) {
     background: #2c52ed;
 }
 
@@ -442,7 +449,8 @@ form label {
     align-self: center;
 }
 
-form input, form select{
+form input,
+form select {
     outline: none;
     padding: 10px 15px 10px 45px;
     font-size: 15px;
@@ -461,17 +469,17 @@ form i {
     transform: translateY(25%) translateX(10px);
 }
 
-.text.form-header{
+.text.form-header {
     border-bottom: solid 3px var(--text-color);
     padding: 0px 20px 20px 20px;
     font-weight: bold;
 }
 
-#Add{
+#Add {
     text-align: center;
 }
 
-div.grid-container{
+div.grid-container {
     padding: 40px 0px 90px 0px;
     display: grid;
     grid-template-columns: 50% 50%;
@@ -491,13 +499,40 @@ div.grid-container{
     }
 }
 
-i.bx-hide, i.bx-show {
+i.bx-hide,
+i.bx-show {
     cursor: pointer;
 }
 
 th.small,
 td.small {
     font-size: 8px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }
 
 table.dataTable.display tbody tr.odd>.sorting_1 {
@@ -522,28 +557,32 @@ table.dataTable thead tr {
 
 /* Round Corner for TOP LEFT COLUMN */
 
-table thead tr:first-child  th:first-child
-{
+table thead tr:first-child th:first-child {
     border-top-left-radius: 10px;
 }
 
 /* Round Corner for TOP RIGHT COLUMN */
 
-table thead tr:first-child  th:last-child
-{
+table thead tr:first-child th:last-child {
     border-top-right-radius: 10px;
 }
 
 /* Round Corner for BOTTOM LEFT COLUMN */
 
-table tbody tr:last-child td:first-child
-{
+table tbody tr:last-child td:first-child {
     border-bottom-left-radius: 10px;
 }
 
 /* Round Corner for BOTTOM RIGHT COLUMN */
 
-table tbody tr:last-child td:last-child
-{
+table tbody tr:last-child td:last-child {
     border-bottom-right-radius: 10px;
+}
+
+::-webkit-calendar-picker-indicator {
+    transition: all 0.2s ease;
+}
+
+body.dark ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
 }

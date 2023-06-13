@@ -5,6 +5,7 @@ if (localStorage.getItem("user") == null) {
 }
 let showPass = false;
 let eyeIcon = document.querySelector('.bx-hide');
+document.querySelector('input[type="date"]').max = new Date().toLocaleDateString();
 
 async function downloadData() {
     await fetch("/api/get/vehicle", {
